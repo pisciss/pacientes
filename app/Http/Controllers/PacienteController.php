@@ -16,7 +16,9 @@ class PacienteController extends Controller
      */
     public function index()
     {
-        $pacientes = Auth::user()->pacientes;
+
+
+        $pacientes =  Paciente::whereNotNull('user_id')->paginate(2);
         //
         return view('pacientes.index')->with('pacientes', $pacientes);
     }
@@ -81,9 +83,9 @@ class PacienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Paciente $paciente)
     {
-        //
+        return view('pacientes.edit', compact('paciente'));
     }
 
     /**
@@ -93,8 +95,46 @@ class PacienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Paciente $paciente)
     {
+
+        $data = $request->validate([
+            'nombre' => 'required|min:3',
+            'apellido' => 'required|min:3',
+            'documento' => 'required',
+            'fecha_nacimiento' => 'date',
+            'domicilio' => 'min:10',
+            'sexo' => 'min:5',
+            'estado_civil' => 'min:5',
+            'telefono' => 'numeric',
+            'email' => 'email'
+
+
+        ]);
+
+        $paciente->nombre = $data['nombre'];
+        $paciente->apellido = $data['apellido'];
+        $paciente->documento = $data['documento'];
+        $paciente->fecha_nacimiento = $data['fecha_nacimiento'];
+        $paciente->domicilio = $data['domicilio'];
+        $paciente->sexo = $data['sexo'];
+        $paciente->estado_civil = $data['estado_civil'];
+        $paciente->telefono = $data['telefono'];
+        $paciente->email = $data['email'];
+
+        if (request('imagen')) {
+            $ruta_imagen = $request['imagen']->store('foto-perfil', 'public');
+            // resizes de la imagen
+            $img = Image::make(public_path("storage/{$ruta_imagen}"))->fit(800, 400);
+            $img->save();
+
+            $paciente->imagen = $ruta_imagen;
+        }
+
+
+        $paciente->save();
+        return redirect()->action('PacienteController@index');
+
         //
     }
 
@@ -106,6 +146,10 @@ class PacienteController extends Controller
      */
     public function destroy($id)
     {
+        $paciente = Paciente::findOrFail($id);
+        $paciente->delete();
+        return redirect()->route('pacientes.index');
+
         //
     }
 }

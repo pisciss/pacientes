@@ -42,15 +42,19 @@
             <td>{{$paciente->fecha_nacimiento}}</td>
             <td>{{$paciente->sexo}}</td>
             <td>
-<a href="" class="btn btn-danger mr-1">Eliminar</a>
-<a href="" class="btn btn-dark mr-1">Editar</a>
-<a href="{{route('pacientes.show',['paciente'=>$paciente->id])}}" class="btn btn-success mr-1">Ver</a>
+
+         
+        <eliminar-paciente paciente-id={{$paciente->id}}>  </eliminar-paciente>
+<a href="{{route('pacientes.edit',['paciente'=>$paciente->id])}}" class="btn btn-dark btn-sm">Editar</a>
+<a href="{{route('pacientes.show',['paciente'=>$paciente->id])}}" class="btn btn-success btn-sm">Ver</a>
             </td>
           </tr>
           
           @endforeach
         </tbody>
       </table>
+      <div class="col-12 mt-4 justify-content-center d-flex"> {{$pacientes->links()}}</div>
+     
 </body>
 </html>
 @endsection

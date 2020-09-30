@@ -23,3 +23,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('pacientes', 'PacienteController');
+Route::get('dataTablePaciente','PacienteController@dataTable')->name('dataTablePaciente');

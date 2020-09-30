@@ -7,54 +7,52 @@
 
 @section('content')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Pacientes</title>
-</head>
-<body>
+
+
+
     <h2 class="text-center mb-4">Pacientes</h2>
 
 <div  class="col-md-10 mx-auto p-3"></div>
-    <table class="table table-sm">
+    <table class="table table-sm" id="pac-table">
         <thead>
-          <tr>
+        <tr>
+          <th scope="col">id</th>
             <th scope="col">Apellido</th>
             <th scope="col">Nombre</th>
             <th scope="col">Documento</th>
             <th scope="col">Fecha Nacimiento</th>
             <th scope="col">Sexo</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($pacientes as $paciente)
-            
          
-          <tr>
-           
-            <td>{{$paciente->apellido}}</td>
-            <td>{{$paciente->nombre}}</td>
-            <td>{{$paciente->documento}}</td>
-            <td>{{$paciente->fecha_nacimiento}}</td>
-            <td>{{$paciente->sexo}}</td>
-            <td>
-
-         
-        <eliminar-paciente paciente-id={{$paciente->id}}>  </eliminar-paciente>
-<a href="{{route('pacientes.edit',['paciente'=>$paciente->id])}}" class="btn btn-dark btn-sm">Editar</a>
-<a href="{{route('pacientes.show',['paciente'=>$paciente->id])}}" class="btn btn-success btn-sm">Ver</a>
-            </td>
-          </tr>
+         </tr>
           
-          @endforeach
-        </tbody>
+        </thead>
+       
       </table>
-      <div class="col-12 mt-4 justify-content-center d-flex"> {{$pacientes->links()}}</div>
+      <div class="col-12 mt-4 justify-content-center d-flex"> 
+   
+      
+      </div>
      
-</body>
-</html>
+
+@endsection
+
+@section('scripts') 
+<script>
+$(document).ready( function () {
+    $('#pac-table').DataTable({
+processing:true,
+serverSider:true,
+ajax: '{!! route('dataTablePaciente') !!}',
+columns:[
+  {data: 'id', name:'id'},
+  {data: 'apellido', name:'apellido'},
+  {data: 'nombre', name:'nombre'},
+  {data: 'documento', name:'documento'},
+  {data: 'fecha_nacimiento', name:'fecha_nacimiento'},
+  {data: 'sexo', name:'sexo'},
+]
+    });
+} );
+
+</script>
 @endsection

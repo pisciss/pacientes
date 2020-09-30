@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Paciente;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
+use Yajra\DataTables\DataTables;
 
 class PacienteController extends Controller
 {
@@ -18,9 +19,10 @@ class PacienteController extends Controller
     {
 
 
-        $pacientes =  Paciente::whereNotNull('user_id')->paginate(2);
+      //  $pacientes =  Paciente::whereNotNull('user_id')->paginate(2);
         //
-        return view('pacientes.index')->with('pacientes', $pacientes);
+        //return view('pacientes.index')->with('pacientes', $pacientes);
+        return view('pacientes.index');
     }
 
     /**
@@ -151,5 +153,10 @@ class PacienteController extends Controller
         return redirect()->route('pacientes.index');
 
         //
+    }
+
+    public function dataTable(){
+
+        return DataTables::of(Paciente::query())->make(true);
     }
 }
